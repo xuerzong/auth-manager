@@ -1,8 +1,12 @@
 {
-  "name": "youdaoads-auth-pro",
+  "name": "auth-manager",
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": {
+    "name": "xucong",
+    "email": "xuerzong@gmail.com"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
