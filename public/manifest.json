@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Youdaoads Auth Pro",
+  "description": "this is a content",
+  "version": "1.0.0",
+  "icons": {
+    "16": "images/favicon.png",
+    "48": "images/favicon.png",
+    "128": "images/favicon.png"
+  },
+  "action": {
+    "default_icon": {
+      "16": "images/favicon.png",
+      "48": "images/favicon.png",
+      "128": "images/favicon.png"
+    },
+    "default_popup": "popup.html"
+  }
+}
