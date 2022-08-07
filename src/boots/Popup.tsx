@@ -1,5 +1,14 @@
-import Layout from "./Layout";
-import { createReactRoot } from "@/utils/dom";
+import PopupChildren from '@/components/popup'
+import { createReactRoot } from '@/utils/dom'
+import Layout from './Layout'
 import './Popup.css'
 
-createReactRoot().render(<Layout>Popup</Layout>)
+const Popup: React.FC = () => {
+  return (
+    <Layout>
+      <PopupChildren />
+    </Layout>
+  )
+}
+
+createReactRoot().render(<Popup />)

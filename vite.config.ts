@@ -1,4 +1,5 @@
 import path from 'path'
+import fs from 'fs'
 import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import type { Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -12,12 +13,35 @@ const templatesPath = 'src/templates'
 const popupHtmlPath = `${templatesPath}/popup.html`
 const optionsHtmlPath = `${templatesPath}/options.html`
 
-const renameTemplatesOutputNamePlugin = (filenames: Record<string, string>): Plugin => {
+const templatesUrlPlugin = (): Plugin => {
   return {
-    name: 'renameIndex',
+    name: 'templatesUrlPlugin',
+    apply: 'serve',
+    configureServer(server) {
+      return () => {
+        server.middlewares.use(async (req, res, next) => {
+          if (
+            fs.existsSync(
+              path.join(rootDir, templatesPath, `${req.originalUrl}.html`)
+            )
+          ) {
+            req.url = `/${templatesPath}${req.originalUrl}.html`
+          }
+          next()
+        })
+      }
+    },
+  }
+}
+
+const renameTemplatesOutputNamePlugin = (
+  filenames: Record<string, string>
+): Plugin => {
+  return {
+    name: 'renameTemplatesOutputNamePlugin',
     enforce: 'post',
     generateBundle(_, bundle) {
-      Object.keys(filenames).forEach(key => {
+      Object.keys(filenames).forEach((key) => {
         const tmp = bundle[key]
         tmp.fileName = filenames[key]
       })
@@ -32,18 +56,19 @@ export default defineConfig({
     rollupOptions: {
       input: {
         popup: path.resolve(rootDir, popupHtmlPath),
-        options: path.resolve(rootDir, optionsHtmlPath)
+        options: path.resolve(rootDir, optionsHtmlPath),
       },
-    }
+    },
   },
   plugins: [
     react(),
     tsconfigPaths(),
+    templatesUrlPlugin(),
     splitVendorChunkPlugin(),
     renameTemplatesOutputNamePlugin({
       [popupHtmlPath]: popupHtmlPath.replace(`${templatesPath}/`, ''),
-      [optionsHtmlPath]: optionsHtmlPath.replace(`${templatesPath}/`, '')
+      [optionsHtmlPath]: optionsHtmlPath.replace(`${templatesPath}/`, ''),
     }),
-    visualizer()
-  ]
+    visualizer(),
+  ],
 })

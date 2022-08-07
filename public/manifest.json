@@ -15,5 +15,7 @@
       "128": "images/favicon.png"
     },
     "default_popup": "popup.html"
-  }
+  },
+  "permissions": ["storage"],
+  "options_page": "options.html"
 }
