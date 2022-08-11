@@ -1,9 +1,11 @@
 import { Flex, Text, Tag, Spacer, Box } from '@chakra-ui/react'
 import type { AccountInterface } from '@/types/account'
 
-export interface AccountProps extends AccountInterface {}
+export interface AccountProps extends Pick<AccountInterface, 'tags'> {
+  accountKey: string
+}
 
-const Account: React.FC<AccountProps> = ({ account, tags }) => {
+const Account: React.FC<AccountProps> = ({ accountKey, tags = [] }) => {
   const tagsRender = tags.map((tag) => (
     <Tag as="li" key={tag} size="sm" listStyleType="none">
       {tag}
@@ -19,7 +21,7 @@ const Account: React.FC<AccountProps> = ({ account, tags }) => {
       p="2"
     >
       <Text fontSize="sm" fontWeight="bold">
-        {account}
+        {accountKey}
       </Text>
       <Spacer />
       <Box as="ul"> {tagsRender}</Box>

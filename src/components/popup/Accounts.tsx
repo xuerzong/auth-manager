@@ -1,20 +1,8 @@
 import { Box, useRadio, useRadioGroup } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
-import type { AccountInterface } from '@/types/account'
+import useAccounts from '@/stores/accounts'
+import { emptyAccount } from '@/constants/account'
 import Account from '../common/Account'
-
-const accountsMock: AccountInterface[] = [
-  {
-    account: 'admin@163.com',
-    password: '12345a',
-    tags: ['admin'],
-  },
-  {
-    account: 'xcsmall@163.com',
-    password: '12345a',
-    tags: ['op'],
-  },
-]
 
 const AccountRadioCard: React.FC<PropsWithChildren> = (props) => {
   const { getInputProps, getCheckboxProps } = useRadio(props as any)
@@ -40,6 +28,10 @@ const AccountRadioCard: React.FC<PropsWithChildren> = (props) => {
 }
 
 const Accounts: React.FC = () => {
+  const accounts = useAccounts((state) => state.accounts)
+
+  console.log(accounts)
+
   const handleChange = (nextValue: string) => {
     // todo
     console.log(nextValue)
@@ -48,17 +40,14 @@ const Accounts: React.FC = () => {
 
   const { getRootProps, getRadioProps } = useRadioGroup({
     name: 'accounts',
-    defaultValue: accountsMock[0].account,
+    defaultValue: (accounts[0] || emptyAccount).key,
     onChange: handleChange,
   })
 
-  const accountsRender = accountsMock.map((item) => {
+  const accountsRender = accounts.map((item) => {
     return (
-      <AccountRadioCard
-        key={item.account}
-        {...getRadioProps({ value: item.account })}
-      >
-        <Account {...item} />
+      <AccountRadioCard key={item.key} {...getRadioProps({ value: item.key })}>
+        <Account accountKey={item.key} {...item} />
       </AccountRadioCard>
     )
   })

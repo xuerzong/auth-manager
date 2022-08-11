@@ -1,5 +1,5 @@
 export interface AccountInterface {
-  account: string
+  key: string
   password: string
-  tags: string[]
+  tags?: string[]
 }

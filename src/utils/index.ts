@@ -11,3 +11,14 @@ export const goToOptions = () => {
     window.open(chrome.runtime.getURL('options.html'))
   }
 }
+
+export const downloadURI = (uri: string, fileName: string) => {
+  const link = document.createElement('a')
+
+  link.setAttribute('download', fileName)
+  link.href = uri
+
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+}
