@@ -1,5 +1,14 @@
-import Layout from "./Layout";
-import { createReactRoot } from "@/utils/dom";
+import OptionsChildren from '@/components/options'
+import { createReactRoot } from '@/utils/dom'
+import Layout from './Layout'
 import './Options.css'
 
-createReactRoot().render(<Layout>Options</Layout>)
+const Options: React.FC = () => {
+  return (
+    <Layout>
+      <OptionsChildren />
+    </Layout>
+  )
+}
+
+createReactRoot().render(<Options />)
