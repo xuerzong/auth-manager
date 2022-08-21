@@ -1,18 +1,18 @@
 {
   "manifest_version": 3,
-  "name": "Youdaoads Auth Pro",
+  "name": "Auth manager",
   "description": "this is a content",
   "version": "1.0.0",
   "icons": {
-    "16": "images/favicon.png",
-    "48": "images/favicon.png",
-    "128": "images/favicon.png"
+    "16": "./favicon-16x16.png",
+    "48": "./favicon-48x48.png",
+    "128": "./favicon-128x128.png"
   },
   "action": {
     "default_icon": {
-      "16": "images/favicon.png",
-      "48": "images/favicon.png",
-      "128": "images/favicon.png"
+      "16": "./favicon-16x16.png",
+      "48": "./favicon-48x48.png",
+      "128": "./favicon-128x128.png"
     },
     "default_popup": "popup.html"
   },
