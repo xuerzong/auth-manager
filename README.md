@@ -1,6 +1,6 @@
-<article align='center'>
+<section align='center'>
   <img src='./assets/hero.png'></img>
-  <h1>
-    Help developers manage accounts
-  </h1>
-</article>
+  <p>
+   🎉 Help developers manage accounts
+  </p>
+</section>
