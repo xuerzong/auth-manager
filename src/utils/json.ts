@@ -4,14 +4,11 @@ interface DefaultJSONType {
   [key: string]: any
 }
 
-export const exportJson = (
-  json: DefaultJSONType,
-  fileName: string = 'download.json'
-) => {
+export const exportJson = (json: DefaultJSONType, fileName = 'Download') => {
   downloadURI(
     'data:application/json;charset=utf-8,' +
       encodeURIComponent(JSON.stringify(json)),
-    fileName
+    `${fileName}.json`
   )
 }
 

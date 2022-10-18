@@ -9,7 +9,7 @@ const OptionsChildren: React.FC = () => {
     <Fragment>
       <Container maxW="container.md" my="8">
         <VStack w="full">
-          <Toolbar />
+          {/* <Toolbar /> */}
           <Accounts />
         </VStack>
       </Container>

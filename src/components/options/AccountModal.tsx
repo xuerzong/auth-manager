@@ -16,8 +16,10 @@ import {
   VStack,
   useToast,
 } from '@chakra-ui/react'
-import { createOrUpdateAccount } from '@/services/account'
-import useAccounts, { fetchAccounts } from '@/stores/accounts'
+import useAccounts, {
+  fetchAccounts,
+  createOrUpdateAccount,
+} from '@/stores/accounts'
 import useAccountKey, { setKey as setAccountKey } from '@/stores/account-key'
 import useAccountModal, {
   setOpen as setAccountModalOpen,
