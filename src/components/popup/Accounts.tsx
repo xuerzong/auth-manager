@@ -5,6 +5,7 @@ import auth from '@/services/auth'
 import useAccounts from '@/stores/accounts'
 import { emptyAccount } from '@/constants/account'
 import Account from '../common/Account'
+import Empty from '../common/Empty'
 
 const AccountRadioCard: React.FC<PropsWithChildren> = (props) => {
   const { getInputProps, getCheckboxProps } = useRadio(props as any)
@@ -44,7 +45,7 @@ const Accounts: React.FC = () => {
     onChange: handleChange,
   })
 
-  const accountsRender = accounts.map?.((item) => {
+  const accountsRender = accounts.map((item) => {
     return (
       <AccountRadioCard key={item.key} {...getRadioProps({ value: item.key })}>
         <Account accountKey={item.key} {...item} />
@@ -54,7 +55,7 @@ const Accounts: React.FC = () => {
 
   return (
     <Box as="ul" w="full" {...getRootProps()}>
-      {accountsRender}
+      {accounts.length ? accountsRender : <Empty />}
     </Box>
   )
 }

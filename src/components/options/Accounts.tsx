@@ -27,6 +27,7 @@ import type { AccountInterface } from '@/types/account'
 import AccountComp from '../common/Account'
 import type { AccountProps } from '../common/Account'
 import Tags from './Tags'
+import Empty from '../common/Empty'
 
 const Account: React.FC<AccountProps> = (props) => {
   const { accountKey, tags = [] } = props
@@ -143,6 +144,18 @@ const Accounts: React.FC = () => {
     setAccounts(sortedAccounts)
   }
 
+  const accountsRender = (
+    <Reorder.Group
+      axis="y"
+      onReorder={handleOrderAccount}
+      values={accounts.map((item) => item.key)}
+    >
+      {accounts.map((account) => (
+        <Account accountKey={account.key} {...account} key={account.key} />
+      ))}
+    </Reorder.Group>
+  )
+
   return (
     <Box w="full">
       <Flex alignItems="center" mb="4" bg="white">
@@ -158,15 +171,8 @@ const Accounts: React.FC = () => {
         />
         <Tags />
       </Flex>
-      <Reorder.Group
-        axis="y"
-        onReorder={handleOrderAccount}
-        values={accounts.map((item) => item.key)}
-      >
-        {accounts.map((account) => (
-          <Account accountKey={account.key} {...account} key={account.key} />
-        ))}
-      </Reorder.Group>
+
+      {accounts.length ? accountsRender : <Empty />}
     </Box>
   )
 }
