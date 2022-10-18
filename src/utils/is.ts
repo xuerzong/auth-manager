@@ -10,3 +10,7 @@ export const isUndefined = (value: unknown): value is undefined => {
 export const isString = (value: unknown): value is string => {
   return typeof value === 'string'
 }
+
+export const isArray = <T = any>(value: unknown): value is T[] => {
+  return Array.isArray(value)
+}

@@ -18,8 +18,11 @@ import {
 } from '@chakra-ui/react'
 import { Reorder, useDragControls, useMotionValue } from 'framer-motion'
 import { UserPlus } from 'tabler-icons-react'
-import { deleteAccountByKey } from '@/services/account'
-import useAccounts, { fetchAccounts, setAccounts } from '@/stores/accounts'
+import useAccounts, {
+  fetchAccounts,
+  setAccounts,
+  deleteAccountByKey,
+} from '@/stores/accounts'
 import { setKey as setAccountKey } from '@/stores/account-key'
 import { setOpen as setAccountModalOpen } from '@/stores/account-modal'
 import type { AccountInterface } from '@/types/account'

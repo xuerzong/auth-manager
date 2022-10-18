@@ -1,5 +1,7 @@
 import { Box, useRadio, useRadioGroup } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
+import auth from '@/services/auth'
+import tabs from '@/libs/tabs'
 import useAccounts from '@/stores/accounts'
 import { emptyAccount } from '@/constants/account'
 import Account from '../common/Account'
@@ -30,11 +32,9 @@ const AccountRadioCard: React.FC<PropsWithChildren> = (props) => {
 const Accounts: React.FC = () => {
   const accounts = useAccounts((state) => state.accounts)
 
-  console.log(accounts)
-
-  const handleChange = (nextValue: string) => {
-    // todo
-    console.log(nextValue)
+  const handleChange = async (nextKey: string) => {
+    const curAccount = accounts.find((item) => item.key === nextKey)!
+    await auth.select(curAccount)
     window.close()
   }
 
@@ -44,7 +44,7 @@ const Accounts: React.FC = () => {
     onChange: handleChange,
   })
 
-  const accountsRender = accounts.map((item) => {
+  const accountsRender = accounts.map?.((item) => {
     return (
       <AccountRadioCard key={item.key} {...getRadioProps({ value: item.key })}>
         <Account accountKey={item.key} {...item} />

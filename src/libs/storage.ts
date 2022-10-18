@@ -1,21 +1,15 @@
 import { isChromeExtension, isString } from '@/utils/is'
 
-const getInstance = () => {
-  const instance = window.chrome || (window as any).broswer
-  return instance as typeof chrome
-}
-
-interface StorageRes {
-  [key: string]: any
-}
-
-export const getStorage = async <T extends StorageRes>(keys: string) => {
+export const getStorage = async <T = any>(key: string): Promise<T | null> => {
   if (isChromeExtension()) {
-    return (await chrome.storage.sync.get(keys)) as T
+    const { [key]: value } = (await chrome.storage.sync.get(key)) || {
+      [key]: '',
+    }
+    return value ? (JSON.parse(value) as T) : null
   }
 
-  const _value = localStorage.getItem(keys)
-  return _value ? (JSON.parse(_value) as T) : null
+  const value = localStorage.getItem(key)
+  return value ? (JSON.parse(value) as T) : null
 }
 
 export const setStorage = <T>(key: string, value: T) => {
@@ -30,3 +24,5 @@ export const setStorage = <T>(key: string, value: T) => {
 
   localStorage.setItem(key, valueCopy)
 }
+
+export default { set: setStorage, get: getStorage }
