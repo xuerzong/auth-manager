@@ -71,4 +71,7 @@ export default defineConfig({
     }),
     visualizer(),
   ],
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' },
+  },
 })
