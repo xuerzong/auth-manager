@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { DeleteIcon, DragHandleIcon, EditIcon } from '@chakra-ui/icons'
 import {
   Flex,
@@ -15,22 +15,21 @@ import {
   Button,
   PopoverBody,
   useDisclosure,
+  Tag,
+  Stack,
 } from '@chakra-ui/react'
 import { Reorder, useDragControls, useMotionValue } from 'framer-motion'
 import { UserPlus } from 'tabler-icons-react'
-import useAccounts, {
-  fetchAccounts,
-  setAccounts,
-  deleteAccountByKey,
-} from '@/stores/accounts'
+import useAccounts, { setAccounts, deleteAccountByKey } from '@/stores/accounts'
 import { setKey as setAccountKey } from '@/stores/account-key'
 import { setOpen as setAccountModalOpen } from '@/stores/account-modal'
 import type { AccountInterface } from '@/types/account'
 import AccountComp from '../common/Account'
 import type { AccountProps } from '../common/Account'
+import Tags from './Tags'
 
 const Account: React.FC<AccountProps> = (props) => {
-  const { accountKey } = props
+  const { accountKey, tags = [] } = props
 
   const [isHover, setIsHover] = useState<boolean>(false)
   const y = useMotionValue(0)
@@ -45,8 +44,14 @@ const Account: React.FC<AccountProps> = (props) => {
   const handleDeleteAccount = async (key: string) => {
     await deleteAccountByKey(key)
     onClose()
-    fetchAccounts()
   }
+
+  const tagsRender = tags.map((tag) => (
+    <Tag as="li" key={tag} size="sm" whiteSpace="nowrap" listStyleType="none">
+      {tag}
+    </Tag>
+  ))
+
   return (
     <Reorder.Item
       value={accountKey}
@@ -84,7 +89,9 @@ const Account: React.FC<AccountProps> = (props) => {
           color="gray.500"
         />
         <AccountComp {...props} />
-
+        <Stack direction="row" spacing="2" as="ul" mx="2">
+          {tagsRender}
+        </Stack>
         <Flex>
           <IconButton
             size="sm"
@@ -144,10 +151,12 @@ const Accounts: React.FC = () => {
         </Text>
         <Spacer />
         <IconButton
+          mr="2"
           aria-label="add account"
           icon={<Icon as={UserPlus} />}
           onClick={onModalShow}
         />
+        <Tags />
       </Flex>
       <Reorder.Group
         axis="y"
@@ -155,7 +164,7 @@ const Accounts: React.FC = () => {
         values={accounts.map((item) => item.key)}
       >
         {accounts.map((account) => (
-          <Account key={account.key} accountKey={account.key} />
+          <Account accountKey={account.key} {...account} key={account.key} />
         ))}
       </Reorder.Group>
     </Box>

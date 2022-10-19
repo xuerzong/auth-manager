@@ -1,7 +1,7 @@
 import { Box, useRadio, useRadioGroup } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
+import { Select } from 'chakra-react-select'
 import auth from '@/services/auth'
-import tabs from '@/libs/tabs'
 import useAccounts from '@/stores/accounts'
 import { emptyAccount } from '@/constants/account'
 import Account from '../common/Account'

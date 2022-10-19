@@ -41,7 +41,7 @@ export const createOrUpdateAccount = async (
   } else {
     curAccounts[originAccountIndex] = newAccount
   }
-  await setAccounts(curAccounts)
+  await setAccounts([...curAccounts])
 }
 
 export const deleteAccountByKey = async (key: string) => {
@@ -50,7 +50,7 @@ export const deleteAccountByKey = async (key: string) => {
   if (originAccountIndex > -1) {
     curAccounts.splice(originAccountIndex, 1)
   }
-  await setAccounts(curAccounts)
+  await setAccounts([...curAccounts])
 }
 
 export default store

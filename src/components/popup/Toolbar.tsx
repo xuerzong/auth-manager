@@ -1,21 +1,19 @@
-import { goToOptions } from '@/utils'
-import { Box, Flex, Icon, Spacer, Tooltip } from '@chakra-ui/react'
+import { ButtonGroup, Flex, IconButton, Spacer } from '@chakra-ui/react'
 import { Settings } from 'tabler-icons-react'
+import { goToOptions } from '@/utils'
 
 const Toolbar = () => {
   return (
     <Flex w="full" alignItems="center" p="2">
       <Spacer />
-      <Tooltip label="Setting options">
-        <Box as="span">
-          <Icon
-            cursor="pointer"
-            verticalAlign="-0.125em"
-            as={Settings}
-            onClick={goToOptions}
-          />
-        </Box>
-      </Tooltip>
+      <ButtonGroup>
+        <IconButton
+          size="sm"
+          aria-label="to-options"
+          icon={<Settings />}
+          onClick={goToOptions}
+        />
+      </ButtonGroup>
     </Flex>
   )
 }

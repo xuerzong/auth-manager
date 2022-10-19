@@ -16,18 +16,23 @@ import {
   VStack,
   useToast,
 } from '@chakra-ui/react'
-import useAccounts, {
-  fetchAccounts,
-  createOrUpdateAccount,
-} from '@/stores/accounts'
+import { MultiValue, Select } from 'chakra-react-select'
+import useAccounts, { createOrUpdateAccount } from '@/stores/accounts'
 import useAccountKey, { setKey as setAccountKey } from '@/stores/account-key'
 import useAccountModal, {
   setOpen as setAccountModalOpen,
 } from '@/stores/account-modal'
+import useTags from '@/stores/tags'
 import { AccountModalModes } from '@/constants/account'
 import type { AccountInterface } from '@/types/account'
+import cloneDeep from 'clone-deep'
 
-const emptyAccount: AccountInterface = {
+interface TagOptions {
+  label: string
+  value: string
+}
+
+const emptyAccount: Omit<AccountInterface, 'tags'> & { tags?: TagOptions[] } = {
   key: '',
   password: '',
 }
@@ -38,8 +43,13 @@ const getToastConfig = () => ({
   duration: 3000,
 })
 
+const toSelectOptions = (arr?: string[]): TagOptions[] | undefined => {
+  return arr?.map((item) => ({ label: item, value: item }))
+}
+
 const AccountModal: React.FC = () => {
   const toast = useToast()
+  const tags = useTags((state) => state.tags)
   const accounts = useAccounts((state) => state.accounts)
   const accountKey = useAccountKey((state) => state.key)
   const accountModalMode = Boolean(accountKey)
@@ -50,13 +60,12 @@ const AccountModal: React.FC = () => {
   const accountCache = useRef({ ...emptyAccount })
 
   useEffect(() => {
-    const accountTmp = accounts.find((item) => item.key === accountKey) || {
-      ...emptyAccount,
-    }
-    setCurAccount(
-      accounts.find((item) => item.key === accountKey) || { ...emptyAccount }
-    )
-    accountCache.current = accountTmp
+    const accountTmp = accounts.find((item) => item.key === accountKey)
+    const account = accountTmp
+      ? { ...accountTmp, tags: toSelectOptions(accountTmp.tags) }
+      : { ...emptyAccount }
+    setCurAccount(cloneDeep(account))
+    accountCache.current = cloneDeep(account)
   }, [accountKey, accounts])
 
   const titleRender = `${accountModalMode} an user`
@@ -84,15 +93,21 @@ const AccountModal: React.FC = () => {
         ...getToastConfig(),
       })
     }
-    await createOrUpdateAccount(accountCache.current.key, curAccount)
+    await createOrUpdateAccount(accountCache.current.key, {
+      ...curAccount,
+      tags: curAccount.tags?.map((item) => item.value),
+    })
     onCancel()
-    fetchAccounts()
   }
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name
     const value = e.target.value
     setCurAccount({ ...curAccount, [name]: value })
+  }
+
+  const handleTagChange = (e: MultiValue<TagOptions>) => {
+    setCurAccount({ ...curAccount, tags: e as TagOptions[] })
   }
 
   const onCancel = () => {
@@ -132,6 +147,19 @@ const AccountModal: React.FC = () => {
                   placeholder="Password"
                   value={curAccount.password}
                   onChange={handleChange}
+                />
+              </FormControl>
+
+              <FormControl>
+                <FormLabel htmlFor="tabs">Tabs</FormLabel>
+                <Select
+                  id="tabs"
+                  name="tabs"
+                  placeholder="Tabs"
+                  value={curAccount.tags}
+                  onChange={handleTagChange}
+                  options={tags.map((item) => ({ label: item, value: item }))}
+                  isMulti
                 />
               </FormControl>
             </VStack>
