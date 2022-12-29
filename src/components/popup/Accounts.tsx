@@ -1,37 +1,16 @@
-import { Box, useRadio, useRadioGroup } from '@chakra-ui/react'
-import { PropsWithChildren } from 'react'
-import { Select } from 'chakra-react-select'
 import auth from '@/services/auth'
 import useAccounts from '@/stores/accounts'
+import useTags from '@/stores/tags'
 import { emptyAccount } from '@/constants/account'
 import Account from '../common/Account'
 import Empty from '../common/Empty'
-
-const AccountRadioCard: React.FC<PropsWithChildren> = (props) => {
-  const { getInputProps, getCheckboxProps } = useRadio(props as any)
-
-  return (
-    <Box as="label">
-      <input {...getInputProps()} />
-      <Box
-        {...getCheckboxProps()}
-        cursor="pointer"
-        _hover={{
-          bg: 'gray.100',
-        }}
-        _checked={{
-          bg: 'blue.600',
-          color: 'white',
-        }}
-      >
-        {props.children}
-      </Box>
-    </Box>
-  )
-}
+import { ChevronRightIcon } from '../icons/ChevronRight'
 
 const Accounts: React.FC = () => {
   const accounts = useAccounts((state) => state.accounts)
+  const tags = useTags((state) => state.tags)
+
+  console.log(tags)
 
   const handleChange = async (nextKey: string) => {
     const curAccount = accounts.find((item) => item.key === nextKey)!
@@ -39,24 +18,22 @@ const Accounts: React.FC = () => {
     window.close()
   }
 
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name: 'accounts',
-    defaultValue: (accounts[0] || emptyAccount).key,
-    onChange: handleChange,
-  })
-
-  const accountsRender = accounts.map((item) => {
-    return (
-      <AccountRadioCard key={item.key} {...getRadioProps({ value: item.key })}>
-        <Account accountKey={item.key} {...item} />
-      </AccountRadioCard>
-    )
-  })
-
   return (
-    <Box as="ul" w="full" {...getRootProps()}>
-      {accounts.length ? accountsRender : <Empty />}
-    </Box>
+    <ul className="w-full">
+      {tags.map((item) => (
+        <li key={item}>
+          <div className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-200 transition-all">
+            {item}
+
+            <div className="flex-1"></div>
+
+            <span className="block w-6 h-6">
+              <ChevronRightIcon />
+            </span>
+          </div>
+        </li>
+      ))}
+    </ul>
   )
 }
 
