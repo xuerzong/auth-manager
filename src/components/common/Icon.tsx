@@ -17,7 +17,7 @@ const Icon = forwardRef<HTMLSpanElement, IconProps>(
       <span
         ref={ref}
         className={cls(className, 'block', {
-          'w-8 h-8': size === 'sm',
+          'w-8 h-8': size === 'lg',
           'w-6 h-6': size === 'md',
           'w-4 h-4': size === 'sm',
         })}
