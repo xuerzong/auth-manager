@@ -1,7 +1,5 @@
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import type { PropsWithChildren } from 'react'
-import { ChakraProvider } from '@chakra-ui/react'
-import theme from '@/libs/theme'
 import { fetchAccounts } from '@/stores/accounts'
 import { fetchTags } from '@/stores/tags'
 import '@/styles/tailwind.css'
@@ -15,7 +13,7 @@ const Layout: React.FC<PropsWithChildren> = ({ children }) => {
     fetchTags()
   }, [fetchTags])
 
-  return <ChakraProvider theme={theme}>{children}</ChakraProvider>
+  return <Fragment>{children}</Fragment>
 }
 
 export default Layout

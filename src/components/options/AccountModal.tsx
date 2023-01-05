@@ -1,22 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
-import {
-  Button,
-  ButtonGroup,
-  FormControl,
-  FormLabel,
-  Modal,
-  Input,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-  VStack,
-  useToast,
-} from '@chakra-ui/react'
-import { MultiValue, Select } from 'chakra-react-select'
 import useAccounts, { createOrUpdateAccount } from '@/stores/accounts'
 import useAccountKey, { setKey as setAccountKey } from '@/stores/account-key'
 import useAccountModal, {
@@ -26,29 +9,16 @@ import useTags from '@/stores/tags'
 import { AccountModalModes } from '@/constants/account'
 import type { AccountInterface } from '@/types/account'
 import cloneDeep from 'clone-deep'
+import Modal from '../common/Modal'
+import Input from '../common/Input'
+import Select from '../common/Select'
 
-interface TagOptions {
-  label: string
-  value: string
-}
-
-const emptyAccount: Omit<AccountInterface, 'tags'> & { tags?: TagOptions[] } = {
+const emptyAccount: AccountInterface = {
   key: '',
   password: '',
 }
 
-const getToastConfig = () => ({
-  position: 'top' as 'top',
-  isClosable: true,
-  duration: 3000,
-})
-
-const toSelectOptions = (arr?: string[]): TagOptions[] | undefined => {
-  return arr?.map((item) => ({ label: item, value: item }))
-}
-
 const AccountModal: React.FC = () => {
-  const toast = useToast()
   const tags = useTags((state) => state.tags)
   const accounts = useAccounts((state) => state.accounts)
   const accountKey = useAccountKey((state) => state.key)
@@ -61,22 +31,14 @@ const AccountModal: React.FC = () => {
 
   useEffect(() => {
     const accountTmp = accounts.find((item) => item.key === accountKey)
-    const account = accountTmp
-      ? { ...accountTmp, tags: toSelectOptions(accountTmp.tags) }
-      : { ...emptyAccount }
+    const account = accountTmp ? { ...accountTmp } : { ...emptyAccount }
     setCurAccount(cloneDeep(account))
     accountCache.current = cloneDeep(account)
   }, [accountKey, accounts])
 
-  const titleRender = `${accountModalMode} an user`
-
   const onOk = async () => {
     if (!curAccount.key) {
-      return toast({
-        title: '输入账号',
-        status: 'error',
-        ...getToastConfig(),
-      })
+      return alert('Account is required')
     }
     const isAddUser = accountModalMode === AccountModalModes.Add
     const accountIsExsited = Boolean(
@@ -87,16 +49,9 @@ const AccountModal: React.FC = () => {
       )
     )
     if (accountIsExsited) {
-      return toast({
-        title: '账号已存在',
-        status: 'error',
-        ...getToastConfig(),
-      })
+      return alert('Account is existed')
     }
-    await createOrUpdateAccount(accountCache.current.key, {
-      ...curAccount,
-      tags: curAccount.tags?.map((item) => item.value),
-    })
+    await createOrUpdateAccount(accountCache.current.key, curAccount)
     onCancel()
   }
 
@@ -106,8 +61,8 @@ const AccountModal: React.FC = () => {
     setCurAccount({ ...curAccount, [name]: value })
   }
 
-  const handleTagChange = (e: MultiValue<TagOptions>) => {
-    setCurAccount({ ...curAccount, tags: e as TagOptions[] })
+  const handleSelectTag = (tag: string) => {
+    setCurAccount({ ...curAccount, tags: [tag] })
   }
 
   const onCancel = () => {
@@ -120,61 +75,44 @@ const AccountModal: React.FC = () => {
   }
 
   return (
-    <Modal isOpen={accountModalOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>
-          <Text>{titleRender}</Text>
-        </ModalHeader>
+    <Modal visible={accountModalOpen} onClose={onClose} onOk={onOk}>
+      <form>
+        <div className="space-y-2">
+          <div className="space-y-2">
+            <label htmlFor="account">Account</label>
+            <Input
+              name="key"
+              value={curAccount.key}
+              placeholder="Please enter account"
+              onChange={handleChange}
+            />
+          </div>
 
-        <ModalBody>
-          {accountModalOpen && (
-            <VStack>
-              <FormControl>
-                <FormLabel htmlFor="account">Account</FormLabel>
-                <Input
-                  name="key"
-                  placeholder="Account"
-                  value={curAccount.key}
-                  onChange={handleChange}
-                />
-              </FormControl>
+          <div className="space-y-2">
+            <label htmlFor="password">Password</label>
+            <Input
+              name="password"
+              value={curAccount.password}
+              placeholder="Please enter password"
+              type="password"
+              onChange={handleChange}
+            />
+          </div>
 
-              <FormControl>
-                <FormLabel htmlFor="password">Password</FormLabel>
-                <Input
-                  name="password"
-                  placeholder="Password"
-                  value={curAccount.password}
-                  onChange={handleChange}
-                />
-              </FormControl>
-
-              <FormControl>
-                <FormLabel htmlFor="tabs">Tabs</FormLabel>
-                <Select
-                  id="tabs"
-                  name="tabs"
-                  placeholder="Tabs"
-                  value={curAccount.tags}
-                  onChange={handleTagChange}
-                  options={tags.map((item) => ({ label: item, value: item }))}
-                  isMulti
-                />
-              </FormControl>
-            </VStack>
-          )}
-        </ModalBody>
-
-        <ModalFooter>
-          <ButtonGroup>
-            <Button onClick={onCancel}>Cancel</Button>
-            <Button colorScheme="purple" onClick={onOk}>
-              Ok
-            </Button>
-          </ButtonGroup>
-        </ModalFooter>
-      </ModalContent>
+          <div className="space-y-2">
+            <div className="space-y-2">
+              <label htmlFor="tags">Tags</label>
+              <Select
+                name="tags"
+                value={curAccount.tags?.[0]}
+                placeholder="Please select tags"
+                options={tags.map((tag) => ({ value: tag, label: tag }))}
+                onChange={handleSelectTag}
+              />
+            </div>
+          </div>
+        </div>
+      </form>
     </Modal>
   )
 }
