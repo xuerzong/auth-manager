@@ -1,21 +1,14 @@
-import { Fragment } from 'react'
-import { Container, VStack } from '@chakra-ui/react'
 import AccountModal from './AccountModal'
 import Accounts from './Accounts'
-import Toolbar from './Toolbar'
+import DeleteAccountModal from './DeleteAccountModal'
 
 const OptionsChildren: React.FC = () => {
   return (
-    <Fragment>
-      <Container maxW="container.md" my="8">
-        <VStack w="full">
-          {/* <Toolbar /> */}
-          <Accounts />
-        </VStack>
-      </Container>
-
+    <div className="max-w-screen-md p-4 md:px-0 mx-auto">
+      <Accounts />
       <AccountModal />
-    </Fragment>
+      <DeleteAccountModal />
+    </div>
   )
 }
 

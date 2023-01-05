@@ -3,10 +3,16 @@ import tagsService from '@/services/tag'
 
 interface State {
   tags: string[]
+
+  /**
+   * Popup selected tag
+   */
+  currentTag: string
 }
 
 const store = create<State>(() => ({
   tags: [],
+  currentTag: '',
 }))
 
 export const setTags = async (tags: string[], saveStorage = true) => {
@@ -39,6 +45,14 @@ export const deleteTagByValue = async (tag: string) => {
     curTags.splice(tagIndex, 1)
   }
   await setTags([...curTags])
+}
+
+export const setCurrentTag = (newCurrentTag: string) => {
+  store.setState({ currentTag: newCurrentTag })
+}
+
+export const clearCurrentTag = () => {
+  setCurrentTag('')
 }
 
 export default store
