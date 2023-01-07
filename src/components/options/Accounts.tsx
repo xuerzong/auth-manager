@@ -25,7 +25,7 @@ const Accounts: React.FC = () => {
   return (
     <div>
       <div className="flex items-center mb-4">
-        <span className="font-bold uppercase">Account Manager</span>
+        <span className="font-bold uppercase">Account List</span>
         <div className="flex-1" />
 
         <IconButton onClick={() => handleEditAccount()}>

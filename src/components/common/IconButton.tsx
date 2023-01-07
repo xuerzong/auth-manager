@@ -12,7 +12,7 @@ const IconButton = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={cls(
           className,
-          'p-2 bg-gray-200 text-sm rounded hover:bg-gray-300 transition-all outline-none'
+          'px-2 py-2 bg-white text-sm text-primary-600 border-2 border-primary-600 rounded ring-0 ring-primary-400 transition-all outline-none hover:bg-blue-100 active:bg-blue-100 active:ring-2'
         )}
         {...buttonProps}
       >
