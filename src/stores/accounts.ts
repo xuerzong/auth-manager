@@ -53,4 +53,15 @@ export const deleteAccountByKey = async (key: string) => {
   await setAccounts([...curAccounts])
 }
 
+export const deleteTagFromAccount = (tag: string) => {
+  const { accounts } = store.getState()
+  const nextAccounts = accounts.map((account) => {
+    if (Array.isArray(account.tags)) {
+      account.tags.splice(account.tags.indexOf(tag), 1)
+    }
+    return account
+  })
+  setAccounts(nextAccounts)
+}
+
 export default store

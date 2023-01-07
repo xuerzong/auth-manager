@@ -66,6 +66,7 @@ const Modal: React.FC<PropsWithChildren<Props>> = ({
                       await onOk()
                       onClose()
                     }}
+                    variant="contained"
                   >
                     {okText}
                   </Button>

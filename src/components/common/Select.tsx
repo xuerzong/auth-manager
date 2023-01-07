@@ -41,7 +41,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         ref={ref}
         className={cls(
           className,
-          'inline-block w-full px-4 py-2 bg-gray-100 ring-0 ring-violet-500 focus:ring-2 rounded outline-none transition-all appearance-none',
+          'inline-block w-full px-4 py-2 bg-gray-100 ring-0 ring-primary-600 focus:ring-2 rounded outline-none transition-all appearance-none',
           {
             'text-gray-400':
               selectedValue === '' || typeof selectedValue === 'undefined',
