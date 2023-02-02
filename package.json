@@ -14,9 +14,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^2.0.4",
     "@headlessui/react": "^1.7.7",
-    "chakra-react-select": "^4.3.0",
     "classnames": "^2.3.2",
     "clone-deep": "^4.0.1",
     "framer-motion": "^6",
