@@ -63,7 +63,7 @@ const PopupChildren: React.FC = () => {
   )
 
   return (
-    <div className="w-80 flex flex-col space-y-4">
+    <div className="w-80 flex flex-col space-y-4 mx-auto">
       <div className="flex items-center p-2">
         {currentTagRender}
         <div className="flex-1"></div>
