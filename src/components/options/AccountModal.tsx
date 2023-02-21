@@ -1,46 +1,36 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
-import useAccounts, { createOrUpdateAccount } from '@/stores/accounts'
-import useAccountKey, { setKey as setAccountKey } from '@/stores/account-key'
-import useAccountModal, {
-  setOpen as setAccountModalOpen,
-} from '@/stores/account-modal'
-import useTags from '@/stores/tags'
-import { AccountModalModes } from '@/constants/account'
-import type { AccountInterface } from '@/types/account'
 import cloneDeep from 'clone-deep'
+import useAccounts, { createOrUpdateAccount } from '@/stores/accounts'
+import useApp, {
+  setAccountModalVisible,
+  clearCurrentAccount,
+} from '@/stores/app'
+import useTags from '@/stores/tags'
+import { emptyAccount } from '@/constants/account'
 import Modal from '../common/Modal'
 import Input from '../common/Input'
 import Select from '../common/Select'
 
-const emptyAccount: AccountInterface = {
-  key: '',
-  password: '',
-}
-
 const AccountModal: React.FC = () => {
   const tags = useTags((state) => state.tags)
   const accounts = useAccounts((state) => state.accounts)
-  const accountKey = useAccountKey((state) => state.key)
-  const accountModalMode = Boolean(accountKey)
-    ? AccountModalModes.Edit
-    : AccountModalModes.Add
-  const accountModalOpen = useAccountModal((state) => state.open)
+  const { currentAccount, accountModalVisible } = useApp()
   const [curAccount, setCurAccount] = useState({ ...emptyAccount })
   const accountCache = useRef({ ...emptyAccount })
 
   useEffect(() => {
-    const accountTmp = accounts.find((item) => item.key === accountKey)
+    const accountTmp = accounts.find((item) => item.key === currentAccount)
     const account = accountTmp ? { ...accountTmp } : { ...emptyAccount }
     setCurAccount(cloneDeep(account))
     accountCache.current = cloneDeep(account)
-  }, [accountKey, accounts])
+  }, [currentAccount, accounts])
 
   const onOk = async () => {
     if (!curAccount.key) {
       return alert('Account is required')
     }
-    const isAddUser = accountModalMode === AccountModalModes.Add
+    const isAddUser = !currentAccount
     const accountIsExsited = Boolean(
       accounts.find((item) =>
         isAddUser
@@ -70,12 +60,12 @@ const AccountModal: React.FC = () => {
   }
 
   const onClose = () => {
-    setAccountKey('')
-    setAccountModalOpen(false)
+    clearCurrentAccount()
+    setAccountModalVisible(false)
   }
 
   return (
-    <Modal visible={accountModalOpen} onClose={onClose} onOk={onOk}>
+    <Modal visible={accountModalVisible} onClose={onClose} onOk={onOk}>
       <form>
         <div className="space-y-2">
           <div className="space-y-2">

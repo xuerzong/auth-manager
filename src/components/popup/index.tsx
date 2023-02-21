@@ -1,7 +1,8 @@
 import { Fragment, useMemo } from 'react'
 import auth from '@/services/auth'
 import useAccounts from '@/stores/accounts'
-import useTags, { setCurrentTag, clearCurrentTag } from '@/stores/tags'
+import useApp, { setCurrentTag, clearCurrentTag } from '@/stores/app'
+import useTags from '@/stores/tags'
 import { goToOptions } from '@/utils'
 import { ChevronLeftIcon } from '../icons/ChevronLeft'
 import { SettingIcon } from '../icons/Setting'
@@ -12,9 +13,10 @@ import { ChevronRightIcon } from '../icons/ChevronRight'
 
 const PopupChildren: React.FC = () => {
   const accounts = useAccounts((state) => state.accounts)
-  const { tags, currentTag } = useTags()
+  const tags = useTags((state) => state.tags)
+  const currentTag = useApp((state) => state.currentTag)
   const accountsMemo = useMemo(() => {
-    return accounts.filter((a) => a.tags && a.tags.includes(currentTag))
+    return accounts.filter((a) => a.tags && a.tags.includes(currentTag || ''))
   }, [currentTag])
 
   const handleChange = async (nextKey: string) => {

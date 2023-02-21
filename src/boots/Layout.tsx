@@ -1,18 +1,11 @@
-import { Fragment, useEffect } from 'react'
+import { Fragment } from 'react'
 import type { PropsWithChildren } from 'react'
-import { fetchAccounts } from '@/stores/accounts'
-import { fetchTags } from '@/stores/tags'
+import useInitStoreAsync from '@/hooks/useInitStoreAsync'
 import '@/styles/tailwind.css'
 import './Layout.css'
 
 const Layout: React.FC<PropsWithChildren> = ({ children }) => {
-  useEffect(() => {
-    fetchAccounts()
-  }, [fetchAccounts])
-  useEffect(() => {
-    fetchTags()
-  }, [fetchTags])
-
+  useInitStoreAsync()
   return <Fragment>{children}</Fragment>
 }
 

@@ -2,6 +2,7 @@ import create from 'zustand'
 
 interface State {
   currentAccount?: string
+  accountModalVisible: boolean
   deleteAccountModalVisible: boolean
 
   currentTag?: string
@@ -10,6 +11,7 @@ interface State {
 }
 
 const initialState: State = {
+  accountModalVisible: false,
   deleteAccountModalVisible: false,
   tagModalVisible: false,
   deleteTagModalVisible: false,
@@ -23,6 +25,10 @@ export const setCurrentAccount = (account: string) => {
 
 export const clearCurrentAccount = () => {
   store.setState({ currentAccount: undefined })
+}
+
+export const setAccountModalVisible = (visible: boolean) => {
+  store.setState({ accountModalVisible: visible })
 }
 
 export const setDeleteAccountModalVisible = (visible: boolean) => {

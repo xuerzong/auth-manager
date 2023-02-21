@@ -29,4 +29,6 @@ const Icon = forwardRef<HTMLSpanElement, IconProps>(
   }
 )
 
+Icon.displayName = 'Icon'
+
 export default Icon

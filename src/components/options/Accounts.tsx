@@ -1,14 +1,16 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import cls from 'classnames'
-import { setCurrentAccount, setDeleteAccountModalVisible } from '@/stores/app'
+import {
+  setAccountModalVisible,
+  setCurrentAccount,
+  setDeleteAccountModalVisible,
+} from '@/stores/app'
 import useAccounts from '@/stores/accounts'
-import { setKey as setAccountKey } from '@/stores/account-key'
-import { setOpen as setAccountModalOpen } from '@/stores/account-modal'
 import Empty from '../common/Empty'
 import IconButton from '../common/IconButton'
 import Icon from '../common/Icon'
-import { DotsHorizontalIcon } from '../common/DotsHorizontal'
+import { DotsHorizontalIcon } from '../icons/DotsHorizontal'
 import { UserPlusIcon } from '../icons/UserPlus'
 import { DeleteIcon } from '../icons/Delete'
 import { EditIcon } from '../icons/Edit'
@@ -17,8 +19,8 @@ const Accounts: React.FC = () => {
   const accounts = useAccounts((state) => state.accounts)
 
   const onEdit = (account?: string) => {
-    setAccountKey(account || '')
-    setAccountModalOpen(true)
+    setCurrentAccount(account || '')
+    setAccountModalVisible(true)
   }
 
   const onDelete = async (account: string) => {

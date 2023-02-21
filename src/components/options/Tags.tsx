@@ -9,11 +9,11 @@ import {
 import useTags from '@/stores/tags'
 import TagModal from './TagModal'
 import DeleteTagModal from './DeleteTagModal'
-import { DotsHorizontalIcon } from '../common/DotsHorizontal'
+import { DotsHorizontalIcon } from '../icons/DotsHorizontal'
 import Empty from '../common/Empty'
 import Icon from '../common/Icon'
 import IconButton from '../common/IconButton'
-import { PlusIcon } from '../common/Plus'
+import { PlusIcon } from '../icons/Plus'
 import { DeleteIcon } from '../icons/Delete'
 import { EditIcon } from '../icons/Edit'
 
