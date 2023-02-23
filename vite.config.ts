@@ -7,11 +7,11 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const rootDir = path.resolve(__dirname)
-const outDir = path.resolve(__dirname, 'dist')
+const outDir = path.resolve(rootDir, 'dist')
 
-const templatesPath = 'src/templates'
-const popupHtmlPath = `${templatesPath}/popup.html`
-const optionsHtmlPath = `${templatesPath}/options.html`
+const templatesPath = path.resolve(rootDir, 'src/templates')
+const popupHtmlPath = path.resolve(templatesPath, 'popup.html')
+const optionsHtmlPath = path.resolve(templatesPath, 'options.html')
 
 const templatesUrlPlugin = (): Plugin => {
   return {
@@ -20,12 +20,15 @@ const templatesUrlPlugin = (): Plugin => {
     configureServer(server) {
       return () => {
         server.middlewares.use(async (req, _, next) => {
-          if (
-            fs.existsSync(
-              path.join(rootDir, templatesPath, `${req.originalUrl}.html`)
+          const originalUrl = req.originalUrl
+          if (originalUrl === '/') {
+            req.url = '/index.html'
+          } else if (fs.existsSync(path.join(templatesPath, originalUrl))) {
+            req.url = path.join(
+              '/',
+              path.relative(rootDir, templatesPath),
+              originalUrl
             )
-          ) {
-            req.url = `/${templatesPath}${req.originalUrl}.html`
           }
           next()
         })
@@ -56,8 +59,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         index: path.resolve(rootDir, 'index.html'),
-        popup: path.resolve(rootDir, popupHtmlPath),
-        options: path.resolve(rootDir, optionsHtmlPath),
+        popup: popupHtmlPath,
+        options: optionsHtmlPath,
       },
     },
   },
@@ -67,8 +70,14 @@ export default defineConfig({
     templatesUrlPlugin(),
     splitVendorChunkPlugin(),
     renameTemplatesOutputNamePlugin({
-      [popupHtmlPath]: popupHtmlPath.replace(`${templatesPath}/`, ''),
-      [optionsHtmlPath]: optionsHtmlPath.replace(`${templatesPath}/`, ''),
+      [path.relative(rootDir, popupHtmlPath)]: path.relative(
+        templatesPath,
+        popupHtmlPath
+      ),
+      [path.relative(rootDir, optionsHtmlPath)]: path.relative(
+        templatesPath,
+        optionsHtmlPath
+      ),
     }),
     visualizer(),
   ],

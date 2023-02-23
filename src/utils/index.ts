@@ -2,7 +2,7 @@ import { isChromeExtension } from './is'
 
 export const goToOptions = () => {
   if (!isChromeExtension()) {
-    return window.open('/options', '_blank')
+    return window.open('/options.html', '_blank')
   }
 
   if (chrome.runtime.openOptionsPage) {
