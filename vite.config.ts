@@ -19,7 +19,7 @@ const templatesUrlPlugin = (): Plugin => {
     apply: 'serve',
     configureServer(server) {
       return () => {
-        server.middlewares.use(async (req, res, next) => {
+        server.middlewares.use(async (req, _, next) => {
           if (
             fs.existsSync(
               path.join(rootDir, templatesPath, `${req.originalUrl}.html`)
@@ -55,6 +55,7 @@ export default defineConfig({
     outDir,
     rollupOptions: {
       input: {
+        index: path.resolve(rootDir, 'index.html'),
         popup: path.resolve(rootDir, popupHtmlPath),
         options: path.resolve(rootDir, optionsHtmlPath),
       },
