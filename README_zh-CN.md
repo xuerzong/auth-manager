@@ -53,39 +53,41 @@ yarn build
 - `@/libs/cookies`
 
 ```typescript
-import { setCookies } from '@/libs/cookies'
+import cookies from '@/libs/cookies'
 
-setCookies(KEY, VALUE)
+cookies.set(KEY, VALUE)
 ```
 
 - `@/libs/tabs`
 
 ```typescript
-import { reload } from '@/libs/tabs'
+import tabs from '@/libs/tabs'
 
-reload() // 重新加载当前tab
+tabs.reload() // 重新加载当前tab
 ```
 
 - `@/libs/storage`
 
 ```typescript
-import { set, get } from '@/libs/storage'
+import storage from '@/libs/storage'
 
-await get(KEY)
+storage.get(KEY)
 
-set(KEY, VALUE)
+storage.set(KEY, VALUE)
 ```
 
 - `@/libs/router`
 
 ```typescript
-import { goto } from '@/libs/router'
+import router from '@/libs/router'
 
-goto(LOCATION)
+router.goto(LOCATION)
 ```
 
 - `@/libs/request`
 
 ```typescript
-import { get, post } from '@/libs/request'
+import reuqest from '@/libs/request'
+request.get(...args)
+request.post(...args)
 ```
