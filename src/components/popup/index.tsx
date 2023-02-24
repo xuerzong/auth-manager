@@ -22,7 +22,6 @@ const PopupChildren: React.FC = () => {
   const handleChange = async (nextKey: string) => {
     const curAccount = accounts.find((item) => item.key === nextKey)!
     await auth.select(curAccount)
-    window.close()
   }
 
   const currentTagRender = currentTag && (
@@ -56,6 +55,7 @@ const PopupChildren: React.FC = () => {
       <div
         key={account.key}
         className="flex items-center px-4 py-2 cursor-pointer hover:bg-gray-200 transition-all"
+        onClick={handleChange.bind(null, account.key)}
       >
         {account.key}
       </div>
