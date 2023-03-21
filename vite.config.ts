@@ -12,6 +12,7 @@ const outDir = path.resolve(rootDir, 'dist')
 const templatesPath = path.resolve(rootDir, 'src/templates')
 const popupHtmlPath = path.resolve(templatesPath, 'popup.html')
 const optionsHtmlPath = path.resolve(templatesPath, 'options.html')
+const welcomeHtmlPath = path.resolve(templatesPath, 'welcome.html')
 
 const templatesUrlPlugin = (): Plugin => {
   return {
@@ -22,7 +23,11 @@ const templatesUrlPlugin = (): Plugin => {
         server.middlewares.use(async (req, _, next) => {
           const originalUrl = req.originalUrl
           if (originalUrl === '/') {
-            req.url = '/index.html'
+            req.url = path.join(
+              '/',
+              path.relative(rootDir, templatesPath),
+              'welcome.html'
+            )
           } else if (fs.existsSync(path.join(templatesPath, originalUrl))) {
             req.url = path.join(
               '/',
@@ -58,7 +63,7 @@ export default defineConfig({
     outDir,
     rollupOptions: {
       input: {
-        index: path.resolve(rootDir, 'index.html'),
+        index: welcomeHtmlPath,
         popup: popupHtmlPath,
         options: optionsHtmlPath,
       },
@@ -68,7 +73,6 @@ export default defineConfig({
     react(),
     tsconfigPaths(),
     templatesUrlPlugin(),
-    splitVendorChunkPlugin(),
     renameTemplatesOutputNamePlugin({
       [path.relative(rootDir, popupHtmlPath)]: path.relative(
         templatesPath,
@@ -77,6 +81,10 @@ export default defineConfig({
       [path.relative(rootDir, optionsHtmlPath)]: path.relative(
         templatesPath,
         optionsHtmlPath
+      ),
+      [path.relative(rootDir, welcomeHtmlPath)]: path.relative(
+        templatesPath,
+        welcomeHtmlPath.replace('welcome.html', 'index.html')
       ),
     }),
     visualizer(),
