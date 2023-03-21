@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent } from 'react'
 import cloneDeep from 'clone-deep'
+import { toast } from 'react-hot-toast'
 import useAccounts, { createOrUpdateAccount } from '@/stores/accounts'
 import useApp, {
   setAccountModalVisible,
@@ -28,7 +29,7 @@ const AccountModal: React.FC = () => {
 
   const onOk = async () => {
     if (!curAccount.key) {
-      return alert('Account is required')
+      return toast.error('Account is required')
     }
     const isAddUser = !currentAccount
     const accountIsExsited = Boolean(
@@ -39,7 +40,7 @@ const AccountModal: React.FC = () => {
       )
     )
     if (accountIsExsited) {
-      return alert('Account is existed')
+      return toast.error('Account is existed')
     }
     await createOrUpdateAccount(accountCache.current.key, curAccount)
     onCancel()

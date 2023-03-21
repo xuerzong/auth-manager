@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { toast } from 'react-hot-toast'
 import useApp, {
   clearCurrentAccount,
   setDeleteAccountModalVisible,
@@ -17,9 +18,9 @@ const DeleteAccountModal = () => {
     const confirmAccount = form.get('account')
     if (confirmAccount === currentAccount) {
       await deleteAccountByKey(currentAccount)
-      alert(`Delete account ${currentAccount} successfully`)
+      toast.success(`Delete account ${currentAccount} successfully`)
     } else {
-      alert(`Delete account ${currentAccount} unsuccessfully`)
+      toast.error(`Delete account ${currentAccount} unsuccessfully`)
     }
   }
 

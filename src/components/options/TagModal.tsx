@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { toast } from 'react-hot-toast'
 import useApp, { clearCurrentTag, setTagModalVisible } from '@/stores/app'
 import useTags, { createOrUpdateTag } from '@/stores/tags'
 import Input from '../common/Input'
@@ -21,7 +22,7 @@ const TagModal: React.FC = () => {
     if (!tags.includes(newTag)) {
       await createOrUpdateTag(currentTag, newTag)
     } else {
-      alert('ooops')
+      toast.error('Cannot have the same tag')
     }
   }
 

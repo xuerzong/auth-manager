@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { toast } from 'react-hot-toast'
 import Input from '../common/Input'
 import Modal from '../common/Modal'
 
@@ -25,12 +26,12 @@ const DeleteModal: React.FC<Props<string>> = ({
     const confirm = form.get(inputName)?.toString().trim()
 
     if (originValue !== confirm) {
-      return alert('Delete unsuccessfully')
+      return toast.error('Delete unsuccessfully')
     }
 
     await onDelete(confirm)
 
-    alert('Delete successfully')
+    toast.success('Delete successfully')
   }
 
   const onClose = async () => {

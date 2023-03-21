@@ -6,7 +6,7 @@ interface Props {
   title?: string
   okText?: string
   cancelText?: string
-  onOk(): Promise<void> | void
+  onOk(): Promise<unknown> | unknown
   onClose(): void
   visible?: boolean
 }
